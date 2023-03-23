@@ -2,9 +2,10 @@ package com.micaelops.livebrief2.account;
 
 public class Account {
 
-    /* Main Account data that is present in both types */
+    // Name of the user and username
     private final String name, username;
 
+    // Age of the user
     private int age;
 
 
@@ -14,16 +15,12 @@ public class Account {
         this.username = username;
     }
 
-    public int getAge() {
-        return age;
-    }
+    public String getUsername() { return username; }
 
-    public void setAge(int age) {
-        this.age = age;
-    }
+    public int getAge() { return age; }
 
-    public String getName() {
-        return name;
-    }
+    public void setAge(int age) { this.age = age; }
+
+    public String getName() { return name; }
 
 }
