@@ -4,8 +4,8 @@ public class ChildAccount extends Account{
 
     private long progress;
 
-    public ChildAccount(String name, String username, int age, AccountType type, long progress) {
-        super(name, age, AccountType.CHILD, username);
+    public ChildAccount(String name, String username, int age, long progress) {
+        super(name, age, username);
         this.progress = progress;
     }
 
