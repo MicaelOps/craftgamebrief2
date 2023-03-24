@@ -10,6 +10,12 @@ public abstract class Menu {
      * Only runs once.
      */
     public abstract void welcome();
+
+    /**
+     * Handles input
+     */
+    public abstract void process();
+
     /**
      * checks if Menu is finished with its processing
      * @return boolean true or false
@@ -21,11 +27,6 @@ public abstract class Menu {
      * @return new Menu
      */
     public abstract Menu getNewMenu();
-
-    /**
-     * Handles input
-     */
-    public abstract void process();
 
     /**
      * Tracks the stage of where the menu is at.

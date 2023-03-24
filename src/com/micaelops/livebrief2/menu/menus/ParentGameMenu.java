@@ -14,6 +14,11 @@ public class ParentGameMenu extends Menu {
         System.out.println("Welcome!");
     }
 
+
+    @Override
+    public void process() {
+
+    }
     @Override
     public boolean isFinished() {
         return false;
@@ -22,10 +27,5 @@ public class ParentGameMenu extends Menu {
     @Override
     public Menu getNewMenu() {
         return null;
-    }
-
-    @Override
-    public void process() {
-
     }
 }

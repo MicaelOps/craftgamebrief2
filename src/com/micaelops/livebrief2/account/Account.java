@@ -1,26 +1,54 @@
 package com.micaelops.livebrief2.account;
 
-public class Account {
+ public abstract class Account {
 
     // Name of the user and username
     private final String name, username;
 
+    private String password;
+
     // Age of the user
     private int age;
 
-
-    public Account(String name, int age, String username) {
-        this.name = name;
-        this.age = age;
-        this.username = username;
+    public Account(){
+        this.username = "";
+        this.password = "";
+        this.name = "";
+        this.age = 0;
     }
 
-    public String getUsername() { return username; }
+    public Account(String username, String password, String name, int age) {
+        this.username = username;
+        this.name = name;
+        this.password = password;
+        this.age = age;
+    }
 
-    public int getAge() { return age; }
+    public String getName() {
+        return name;
+    }
 
-    public void setAge(int age) { this.age = age; }
+    public String getUsername() {
+        return username;
+    }
 
-    public String getName() { return name; }
+    public String getPassword() {
+        return password;
+    }
 
-}
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public abstract Account readFromStringArray(String[] data);
+    public abstract String writeToString();
+
+ }

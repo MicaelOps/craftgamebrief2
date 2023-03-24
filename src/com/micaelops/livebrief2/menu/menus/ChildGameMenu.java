@@ -14,6 +14,11 @@ public class ChildGameMenu extends Menu {
     }
 
     @Override
+    public void process() {
+
+    }
+
+    @Override
     public boolean isFinished() {
         return false;
     }
@@ -23,8 +28,4 @@ public class ChildGameMenu extends Menu {
         return null;
     }
 
-    @Override
-    public void process() {
-
-    }
 }

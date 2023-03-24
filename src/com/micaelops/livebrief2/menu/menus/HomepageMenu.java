@@ -29,15 +29,6 @@ public class HomepageMenu extends Menu {
         setStage(HomepageStage.USERDECISION.getStage());
     }
 
-    @Override
-    public boolean isFinished() {
-        return getStage() == HomepageStage.FINISHED.getStage();
-    }
-
-    @Override
-    public Menu getNewMenu() {
-        return account instanceof ChildAccount ? new ChildGameMenu(account) : new ParentGameMenu(account);
-    }
 
     @Override
     public void process() {
@@ -85,6 +76,16 @@ public class HomepageMenu extends Menu {
         } else System.out.println("Incorrect Details! Try again!");
     }
 
+
+    @Override
+    public boolean isFinished() {
+        return getStage() == HomepageStage.FINISHED.getStage();
+    }
+
+    @Override
+    public Menu getNewMenu() {
+        return account instanceof ChildAccount ? new ChildGameMenu(account) : new ParentGameMenu(account);
+    }
     private enum HomepageStage {
         USERDECISION, FINISHED, CHILDAUTH, AUTH;
 

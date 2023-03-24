@@ -8,8 +8,8 @@ public class Main {
 
     public static void main(String[] args) {
 
-        if(!Database.getInstance().loadData()) {
-            System.out.println("We weren't able to load data.");
+        if(!Database.getInstance().loadAccounts()) {
+            System.out.println("We weren't able to load accounts.");
             System.exit(-1); // exit program;
         }
 
@@ -45,7 +45,6 @@ public class Main {
             }
 
         } while (!finished);
-
 
         System.out.println(System.lineSeparator()); // prints new line, platform independent
         System.out.println("Thank you for using our program!");
