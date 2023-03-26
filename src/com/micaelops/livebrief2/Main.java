@@ -46,6 +46,10 @@ public class Main {
 
         } while (!finished);
 
+        // When this section is reached the program closes
+
+        Database.getInstance().saveData();
+
         System.out.println(System.lineSeparator()); // prints new line, platform independent
         System.out.println("Thank you for using our program!");
 

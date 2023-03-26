@@ -84,7 +84,7 @@ public class Database {
         return false;
     }
 
-    public boolean saveData() {
+    public void saveData() {
 
         try (BufferedWriter outputStream = Files.newBufferedWriter(accountsFile.toPath())) {
 
@@ -92,11 +92,9 @@ public class Database {
                 outputStream.write(account.writeToString());
                 outputStream.newLine();
             }
-            return true;
         } catch (IOException e) {
             System.out.println("Error: "+e.getMessage());
         }
-        return false;
     }
 
     public boolean checkPassword(String user, String password){
@@ -109,13 +107,22 @@ public class Database {
         return account.getPassword().equals(password);
     }
 
+    public boolean existsUsername(String username) {
+        return accounts.containsKey(username);
+    }
+
     public Account getAccount(String username) {
 
-        if(accounts.containsKey(username))
+        if(existsUsername(username))
             return accounts.get(username);
 
         return null;
     }
+
+    public void addAccount(Account account){
+        accounts.put(account.getUsername(), account);
+    }
+
 
 
 }

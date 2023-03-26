@@ -9,3 +9,4 @@
 
  * We don't mention in the design but the age has to be modifiable
  * There can only be one world per child account
+ * Only children can play the game
