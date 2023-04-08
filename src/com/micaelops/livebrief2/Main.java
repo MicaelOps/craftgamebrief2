@@ -17,7 +17,7 @@ public class Main {
         // Beginning Menu
         Menu menu = new HomepageMenu();
 
-        // executes the welcome menu stage
+        // executes the homepage menu welcome
         menu.welcome();
 
         // tracks whether there is no more menus to process
@@ -51,10 +51,9 @@ public class Main {
 
         } while (!finished);
 
-        // When this section is reached the program closes
+        /* When this section is reached the program saves data and closes */
 
         Database.getInstance().saveData();
-
         System.out.println("Thank you for using our program!");
     }
 }

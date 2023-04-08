@@ -96,8 +96,13 @@ public class MethodUtils {
         }
     }
 
-
-
+    /**
+     * Sorts ChildAcoount by their progress in a
+     * bubble sort style.
+     *
+     * @param usernames array that contains the childaccounts
+     * @return sorted array
+     */
     public ChildAccount[] sortChildren(ChildAccount[] usernames){
 
         ChildAccount[] sortedList = new ChildAccount[usernames.length];
@@ -119,6 +124,14 @@ public class MethodUtils {
         }
         return sortedList;
     }
+
+    /**
+     * Sorts usernames by their ChildAccount progress in a
+     * bubble sort style.
+     *
+     * @param usernames array that contains the usernames
+     * @return sorted array
+     */
 
     public ChildAccount[] sortChildren(String[] usernames){
 
