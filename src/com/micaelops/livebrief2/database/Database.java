@@ -6,10 +6,10 @@ import com.micaelops.livebrief2.account.ParentAccount;
 
 import java.io.*;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
+
 
 /***
  * Database system for the accounts and game.
@@ -24,6 +24,8 @@ public class Database {
 
 
     private final HashMap<String, Account> accounts;
+
+
     private final File accountsFile;
 
 
@@ -71,14 +73,15 @@ public class Database {
                         account = new ParentAccount().readFromStringArray(data);
 
                     if(account == null){
-                        System.out.println("Error: Invalid data detected!");
-                        return false;
+                        System.out.println("Error: Invalid data detected! Data: "+accountData);
+                        continue;
                     }
+
                     accounts.put(account.getUsername(), account);
                 }
             }
             return true;
-        } catch (IOException e) {
+        } catch (Exception e) {
             System.out.println("Error: "+e.getMessage());
         }
         return false;
@@ -119,10 +122,17 @@ public class Database {
         return null;
     }
 
+
+    public void loadWorld(){
+
+    }
     public void addAccount(Account account){
         accounts.put(account.getUsername(), account);
     }
 
+    public Collection<Account> getAllAccounts() {
+        return accounts.values();
+    }
 
 
 }

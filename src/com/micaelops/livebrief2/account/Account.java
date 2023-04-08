@@ -49,6 +49,7 @@ package com.micaelops.livebrief2.account;
     }
 
     public abstract Account readFromStringArray(String[] data);
+
     public abstract String writeToString();
 
  }

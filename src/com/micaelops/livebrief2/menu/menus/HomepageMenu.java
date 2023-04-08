@@ -1,6 +1,7 @@
 package com.micaelops.livebrief2.menu.menus;
 
 import com.micaelops.livebrief2.menu.Menu;
+import com.micaelops.livebrief2.menu.OptionsMenu;
 
 import java.util.Scanner;
 
@@ -15,40 +16,37 @@ import java.util.Scanner;
  * 1 = finished
  *
  */
-public class HomepageMenu extends Menu {
+public class HomepageMenu extends OptionsMenu {
 
     private boolean isparent;
 
     @Override
     public void welcome() {
+
         System.out.println("Hello, Welcome to our Intelligentcraft Game");
         System.out.println("Please identify yourself by typing one of the options.");
+
+        super.welcome();
     }
 
 
     @Override
-    public void process() {
-
+    public void printOptions() {
         System.out.println("Options:");
-        System.out.println("    - Child");
-        System.out.println("    - Parent");
-
-        Scanner scanner = new Scanner(System.in);
-        String usertype = scanner.nextLine();
-
-        if(usertype.equalsIgnoreCase("child")) {
-            isparent = false;
-            setStage(FINISHED_STAGE);
-        } else if(usertype.equalsIgnoreCase("parent")) {
-            isparent = true;
-            setStage(FINISHED_STAGE);
-        } else
-            System.out.println("Incorrect option, Try again.");
-
+        System.out.println("    1 - Child");
+        System.out.println("    2 - Parent");
     }
 
+    @Override
+    public void loadOptions() {
+        addOption(1, o -> handleOption(false));
+        addOption(2, o -> handleOption(true));
+    }
 
-
+    public void handleOption(boolean output){
+        isparent = output;
+        setStage(FINISHED_STAGE);
+    }
     @Override
     public Menu getNewMenu() {
         return new AuthMenu(isparent);

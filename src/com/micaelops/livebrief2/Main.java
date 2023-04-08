@@ -8,9 +8,10 @@ public class Main {
 
     public static void main(String[] args) {
 
+        // Loads Data
         if(!Database.getInstance().loadAccounts()) {
             System.out.println("We weren't able to load accounts.");
-            System.exit(-1); // exit program;
+            System.exit(-1);
         }
 
         // Beginning Menu
@@ -19,7 +20,7 @@ public class Main {
         // executes the welcome menu stage
         menu.welcome();
 
-        // tracks whether there is no more menu processing
+        // tracks whether there is no more menus to process
         boolean finished = false;
 
         do {
@@ -38,6 +39,10 @@ public class Main {
 
                 menu = menu.getNewMenu();
 
+                // Adds a few empty lines (platform independent)
+                System.out.println(System.lineSeparator());
+                System.out.println(System.lineSeparator());
+
                 if(menu != null)
                     menu.welcome();
                 else
@@ -50,8 +55,6 @@ public class Main {
 
         Database.getInstance().saveData();
 
-        System.out.println(System.lineSeparator()); // prints new line, platform independent
         System.out.println("Thank you for using our program!");
-
     }
 }

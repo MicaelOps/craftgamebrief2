@@ -1,6 +1,5 @@
 package com.micaelops.livebrief2.utils;
 
-import com.micaelops.livebrief2.account.Account;
 import com.micaelops.livebrief2.account.ChildAccount;
 import com.micaelops.livebrief2.database.Database;
 
@@ -9,18 +8,22 @@ import java.util.Scanner;
 
 /***
  * This class purpose is to avoid creating
- * the same lines of code in other classes
+ * the same lines of code for different purposes
  */
 public class MethodUtils {
 
 
+    // Singleton design
     private static MethodUtils instance;
+
+    // Database instance
     private Database database;
 
     private MethodUtils(){
         database = Database.getInstance();
     }
 
+    // Singleton design
     public static MethodUtils getInstance() {
 
         if(instance == null)
@@ -30,6 +33,18 @@ public class MethodUtils {
     }
 
 
+    /**
+     * Gets input from command line and validates input with
+     * certain minimum characters required and returns as text
+     *
+     * Any invalid input returns as empty string.
+     *
+     * @param scanner Scanner object
+     * @param askMsg Introduction message before taking the input from the user
+     * @param type specifies what kind of data we are dealing with
+     * @param min characters required for the input to be considered valid
+     * @return input for text
+     */
     public String getStringFromInput(Scanner scanner, String askMsg , String type, int min) {
         System.out.println(askMsg);
         String input = scanner.nextLine();
@@ -41,6 +56,19 @@ public class MethodUtils {
         return input;
     }
 
+    /**
+     * Gets input from command line and validates input with
+     * certain minimum characters required and returns as integer
+     *
+     * Any invalid input returns as 0.
+     *
+     * @param scanner Scanner object
+     * @param askMsg Introduction message before taking the input from the user
+     * @param type specifies what kind of data we are dealing with
+     * @param min characters required for the input to be considered valid
+     * @return input for text
+     */
+
     public int getIntFromInput(Scanner scanner, String askMsg , String type, int min) {
         try {
             return Integer.parseInt(getStringFromInput(scanner, askMsg, type, min));
@@ -49,6 +77,17 @@ public class MethodUtils {
         }
     }
 
+    /**
+     * Gets input from command line and validates input with
+     * certain minimum characters required and returns as integer
+     *
+     * Any invalid input returns as 0.
+     *
+     * @param scanner Scanner object
+     * @param min characters required for the input to be considered valid
+     * @return input for text
+     */
+
     public int getIntFromInput(Scanner scanner, int min) {
         try {
             return Integer.parseInt(getStringFromInput(scanner, "", "", min));
@@ -56,6 +95,7 @@ public class MethodUtils {
             return 0;
         }
     }
+
 
 
     public ChildAccount[] sortChildren(ChildAccount[] usernames){
@@ -86,7 +126,7 @@ public class MethodUtils {
 
         for(int i = 0; i < usernames.length; i++) {
             if(database.existsUsername(usernames[i]))
-                sortedList[i] = (ChildAccount) Database.getInstance().getAccount(usernames[i]);
+                sortedList[i] = (ChildAccount)database.getAccount(usernames[i]);
         }
         return sortChildren(sortedList);
     }

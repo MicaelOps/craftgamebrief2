@@ -5,17 +5,15 @@ import com.micaelops.livebrief2.account.ChildAccount;
 import com.micaelops.livebrief2.account.ParentAccount;
 import com.micaelops.livebrief2.database.Database;
 import com.micaelops.livebrief2.menu.Menu;
+import com.micaelops.livebrief2.menu.OptionsMenu;
 import com.micaelops.livebrief2.utils.MethodUtils;
 
 import java.util.Scanner;
 
-public class AuthMenu extends Menu {
+public class AuthMenu extends OptionsMenu {
 
 
     private final boolean isparent;
-
-    // Stages of the menu
-    private final int OPTIONS_STAGE = 0, LOGIN_STAGE = 1, REGISTER_STAGE = 2;
 
     private Account account;
 
@@ -25,25 +23,18 @@ public class AuthMenu extends Menu {
 
     }
 
+
     @Override
-    public void welcome() {
-        System.out.println("Choose your options: ");
-        setStage(OPTIONS_STAGE);
+    public void printOptions() {
+        System.out.println("1 - Register new account ");
+        System.out.println("2 - Log in");
+
     }
 
     @Override
-    public void process() {
-
-        if(getStage() == OPTIONS_STAGE)
-            optionStage();
-
-        else if(getStage() == LOGIN_STAGE)
-            loginAccount();
-
-        else if(getStage() == REGISTER_STAGE)
-            registerAccount();
-
-
+    public void loadOptions() {
+        addOption(1, this::registerAccount);
+        addOption(2, this::loginAccount);
     }
 
     @Override
@@ -51,70 +42,43 @@ public class AuthMenu extends Menu {
         return isparent ? new ParentGameMenu((ParentAccount) account) : new ChildGameMenu((ChildAccount)account);
     }
 
-    private void optionStage(){
+    private void loginAccount(Object objscanner){
 
-        System.out.println("1 - Register new account ");
-        System.out.println("2 - Log in");
-        System.out.println("");
-
-        Scanner scanner = new Scanner(System.in);
-        String input = scanner.nextLine();
-
-        try {
-            int result = Integer.parseInt(input);
-
-            if(result < 1 || result > 2) {
-                System.out.println("Please input a correct number");
-                return;
-            }
-
-            setStage(result);
-
-        } catch (NumberFormatException e){
-            System.out.println("Please input a correct number");
-        }
-    }
-
-    private void loginAccount(){
-
-        System.out.println("Please input username: ");
-
-        Scanner scanner = new Scanner(System.in);
-        String username = scanner.nextLine();
-
-        System.out.println("Please input your "+(isparent ? "Password" : "PIN")+": ");
-
-        String pin = scanner.nextLine();
-
-        Database database = Database.getInstance();
-
-        if(database.checkPassword(username, pin)) {
-
-            account = database.getAccount(username);
-            System.out.println("Successfully authenticated!");
-
-            setStage(FINISHED_STAGE);
-
-        } else System.out.println("Incorrect Details! Try again!");
-    }
-
-
-    private void registerAccount() {
-
-        Scanner scanner = new Scanner(System.in);
         MethodUtils methodUtils = MethodUtils.getInstance();
 
-        String username = methodUtils.getStringFromInput(scanner, "Please input a username " ,"username", 5);
+        String username, password;
+
+        username = methodUtils.getStringFromInput((Scanner) objscanner, "Please input your username " ,"username", 5);
+        password = methodUtils.getStringFromInput((Scanner) objscanner, "Please input your "+(isparent ? "password" : "PIN"), "password", 5);
 
         Database database = Database.getInstance();
 
-        if(database.existsUsername(username)) {
+        if(!database.checkPassword(username, password)) {
+            System.out.println("Incorrect Details! Try again.");
+            return;
+        }
+
+        account = database.getAccount(username);
+
+        System.out.println("Successfully authenticated!");
+
+        setStage(FINISHED_STAGE);
+    }
+
+
+    private void registerAccount(Object scanner) {
+
+        MethodUtils methodUtils = MethodUtils.getInstance();
+
+        String username = methodUtils.getStringFromInput((Scanner) scanner, "Please input a username " ,"username", 5);
+
+        if(Database.getInstance().existsUsername(username)) {
             System.out.println("That username already exists");
             return;
         }
 
-        String name = methodUtils.getStringFromInput(scanner, "Please insert your name ", "name", 3);
-        int age = methodUtils.getIntFromInput(scanner, "Please insert your age", "age", 0);
+        String name = methodUtils.getStringFromInput((Scanner) scanner, "Please insert your name ", "name", 3);
+        int age = methodUtils.getIntFromInput((Scanner) scanner, "Please insert your age", "age", 0);
 
         if(name.isEmpty() || username.isEmpty() || age == 0) {
             System.out.println("Invalid data detected while creating account! Try again!");
@@ -123,28 +87,31 @@ public class AuthMenu extends Menu {
 
         if(!isparent) {
 
-            int pin = methodUtils.getIntFromInput(scanner, "Please input your PIN", "PIN", 4);
+            int pin = methodUtils.getIntFromInput((Scanner) scanner, "Please input your PIN", "PIN", 4);
 
-            if(pin == 0)
+            if(pin == 0) {
+                System.out.println("Invalid PIN");
                 return;
+            }
 
             account = new ChildAccount(username, ""+pin, name, age, 0L);
         } else {
 
-            String password = methodUtils.getStringFromInput(scanner, "Please input your password ", "password", 5);
+            String password = methodUtils.getStringFromInput((Scanner) scanner, "Please input your password ", "password", 5);
 
-            if(password.isEmpty())
+            if(password.isEmpty()) {
+                System.out.println("Invalid password");
                 return;
+            }
 
             account = new ParentAccount(username, password, name, age, new String[5]);
         }
+
+        Database.getInstance().addAccount(account);
 
         System.out.println("Account successfully created!");
         setStage(FINISHED_STAGE);
 
     }
-
-
-
 }
 

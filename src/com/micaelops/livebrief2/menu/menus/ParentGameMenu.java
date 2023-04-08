@@ -1,87 +1,115 @@
 package com.micaelops.livebrief2.menu.menus;
 
-import com.micaelops.livebrief2.account.Account;
 import com.micaelops.livebrief2.account.ChildAccount;
 import com.micaelops.livebrief2.account.ParentAccount;
 import com.micaelops.livebrief2.database.Database;
 import com.micaelops.livebrief2.menu.Menu;
+import com.micaelops.livebrief2.menu.OptionsMenu;
 import com.micaelops.livebrief2.utils.MethodUtils;
 
 import java.util.Scanner;
 
-public class ParentGameMenu extends Menu {
+public class ParentGameMenu extends OptionsMenu {
 
 
-    // Stages of the menu
-    private final int OPTIONS_STAGE = 0, VIEW_PARENT_CHILDREN_STAGE = 1, VIEW_ALL_CHILDRE_STAGE = 2, CHANGE_PIN_STAGE = 3, ADD_CHILD_STAGE = 4;
-
-
-    private ParentAccount account;
+    private final ParentAccount account;
 
     public ParentGameMenu(ParentAccount account) {
         this.account = account;
     }
 
     @Override
-    public void welcome() {
-        System.out.println("Welcome, "+account.getName());
-        setStage(OPTIONS_STAGE);
-    }
-
-
-    @Override
-    public void process() {
-
+    public void printOptions() {
         System.out.println("Choose your options");
         System.out.println("1 - View your children's progression leaderboard");
         System.out.println("2 - View All children leaderboard");
         System.out.println("3 - Change Child's PIN");
         System.out.println("4 - Add child");
-
-        Scanner scanner = new Scanner(System.in);
-
-        MethodUtils methodUtils = MethodUtils.getInstance();
-
-        int option = methodUtils.getIntFromInput(scanner, 1);
-
-        if(option == 0){
-            System.out.println("Invalid option");
-            return;
-        }
-
-        switch (option) {
-
-            case VIEW_PARENT_CHILDREN_STAGE:
-                viewParentChildren();
-                break;
-            case VIEW_ALL_CHILDRE_STAGE:
-                break;
-            case CHANGE_PIN_STAGE:
-                break;
-            case ADD_CHILD_STAGE:
-                break;
-        }
     }
+
+    @Override
+    public void loadOptions() {
+        addOption(1, o -> printLeaderboard(MethodUtils.getInstance().sortChildren(account.getChildren())));
+        addOption(2, o -> printLeaderboard(MethodUtils.getInstance().sortChildren(Database.getInstance().getAllAccounts().stream().filter(account1 -> account1 instanceof ChildAccount).toArray(ChildAccount[]::new))));
+        addOption(3, this::viewChangePin);
+        addOption(4, this::addChildren);
+    }
+
     @Override
     public Menu getNewMenu() {
         return null;
     }
 
-    private void viewParentChildren(){
+    private void addChildren(Object scanner) {
 
-        String[] children = account.getChildren();
+        String username = MethodUtils.getInstance().getStringFromInput((Scanner) scanner, "Please input your child username", "child", 2);
 
-        ChildAccount[] childAccounts = MethodUtils.getInstance().sortChildren(children);
+        if(username.isEmpty() || account.hasChild(username) || !Database.getInstance().existsUsername(username)){
+            System.out.println("Invalid username");
+            return;
+        }
 
-        if(childAccounts[0] == null){
+        if(Database.getInstance().getAccount(username) instanceof ParentAccount) {
+            System.out.println("That username belongs to a parent.");
+            return;
+        }
+        
+        account.addChild(username);
+
+        System.out.println("Your child was added successfully.");
+        setStage(OPTIONS_STAGE);
+
+    }
+    private void viewChangePin(Object objscanner){
+
+        if(!account.hasChildren()) {
+            System.out.println("You don't have any children");
+            return;
+        }
+
+        System.out.println("Please choose one of your children usernames.");
+        System.out.println("Usernames: ");
+
+        for(String children : account.getChildren()){
+            System.out.println("    - "+children);
+        }
+
+        String child = ((Scanner) objscanner).nextLine();
+
+        if(!account.hasChild(child)) {
+            System.out.println("You don't have that child!");
+            return;
+        }
+
+        System.out.println("Please input the pin for the child: ");
+
+        int pin = MethodUtils.getInstance().getIntFromInput((Scanner) objscanner, "Please input the pin for the child", "PIN", 4);
+
+        if(pin != 0){
+            Database.getInstance().getAccount(child).setPassword(""+pin);
+            System.out.println("PIN successfully changed!");
+            setStage(OPTIONS_STAGE);
+        }
+    }
+
+
+    private void printLeaderboard(ChildAccount[] accounts){
+        
+        setStage(OPTIONS_STAGE);
+
+        if(accounts[0] == null) {
             System.out.println("You don't have any children!");
             return;
         }
 
-        for(int i = 0; i < childAccounts.length; i++) {
-            ChildAccount child = childAccounts[i];
+        System.out.println("--------------- Leaderboard ---------------");
+
+
+        for(int i = 0; i < accounts.length; i++) {
+            ChildAccount child = accounts[i];
             System.out.println(" "+i+" - " + child.getName() +" (Age: "+child.getAge()+")" + " Progress: "+child.getProgress());
 
         }
+        System.out.println("--------------- Leaderboard ---------------");
     }
 }
