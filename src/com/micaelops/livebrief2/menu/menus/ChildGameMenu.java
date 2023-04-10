@@ -44,18 +44,28 @@ public class ChildGameMenu extends OptionsMenu {
 
     private void handleWorld(Object isnewworld){
 
-        if((boolean)isnewworld)
+        if((boolean)isnewworld) {
+
+            if(account.findNearestEmptySlot() == 0 && account.getProgress() == 0) {
+                System.out.println("You haven't started a world!");
+                return;
+            }
+
             account.resetWorldStats();
+        }
 
         nextMenu = new WorldGameMenu(account);
         setStage(FINISHED_STAGE);
     }
+
     private void exitGame(Object object){
         nextMenu = null;
         setStage(FINISHED_STAGE);
     }
 
     private void printLeaderboard(Object object){
+
+        setStage(OPTIONS_STAGE);
 
         ChildAccount[] accounts = MethodUtils.getInstance().sortChildren(Database.getInstance().getAllAccounts().stream().filter(account1 -> account1 instanceof ChildAccount).toArray(ChildAccount[]::new));
 

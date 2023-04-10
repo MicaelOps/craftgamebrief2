@@ -1,20 +1,21 @@
 package com.micaelops.livebrief2.game;
 
 import java.util.Arrays;
+import java.util.Random;
 
 /**
  * This class represents all the items that exist
  * inside the game
  *
  * Every item must have a name, and it is optional whether they have components or not
- * The Items with components cannot be picked up by the child exploring the world and must be crafted.
+ * The Items with components cannot be obtained by exploring the world and must be crafted.
  */
 public enum ItemType {
 
     WIRE("Wire");
 
-    String name;
-    Item[] components;
+    final String name;
+    final Item[] components;
 
     ItemType(String name, Item... components){
         this.name = name;
@@ -43,6 +44,16 @@ public enum ItemType {
      */
     public static ItemType[] getItemsWithComponents(){
         return (ItemType[]) Arrays.stream(values()).filter(itemType -> itemType.components.length > 0).toArray();
+    }
+
+    /**
+     * Gets a random ItemType that does not have
+     * components.
+     * @return random ItemType
+     */
+    public static ItemType getRandomItem(){
+        ItemType[] noComponentsItems = Arrays.stream(values()).filter(itemType -> itemType.components.length == 0).toArray(ItemType[]::new);
+        return noComponentsItems[new Random().nextInt(noComponentsItems.length)];
     }
 
     /**

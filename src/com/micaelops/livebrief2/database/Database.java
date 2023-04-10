@@ -82,7 +82,7 @@ public class Database {
             }
             return true;
         } catch (Exception e) {
-            System.out.println("Error: "+e.getMessage());
+            System.out.println("Error: Invalid data detected! Stopping loading...");
         }
         return false;
     }
@@ -92,7 +92,16 @@ public class Database {
         try (BufferedWriter outputStream = Files.newBufferedWriter(accountsFile.toPath())) {
 
             for(Account account : accounts.values()) {
-                outputStream.write(account.writeToString());
+
+                StringBuilder stringBuilder = new StringBuilder();
+
+                for(String data : account.writeToStringArray()){
+                    stringBuilder.append(data).append(":");
+                }
+
+                // Remove the last :
+                outputStream.write(stringBuilder.substring(0, stringBuilder.length()-1));
+
                 outputStream.newLine();
             }
         } catch (IOException e) {
@@ -122,10 +131,6 @@ public class Database {
         return null;
     }
 
-
-    public void loadWorld(){
-
-    }
     public void addAccount(Account account){
         accounts.put(account.getUsername(), account);
     }

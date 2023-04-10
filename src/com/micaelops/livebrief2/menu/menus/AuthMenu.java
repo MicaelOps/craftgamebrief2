@@ -4,6 +4,7 @@ import com.micaelops.livebrief2.account.Account;
 import com.micaelops.livebrief2.account.ChildAccount;
 import com.micaelops.livebrief2.account.ParentAccount;
 import com.micaelops.livebrief2.database.Database;
+import com.micaelops.livebrief2.game.Item;
 import com.micaelops.livebrief2.menu.Menu;
 import com.micaelops.livebrief2.menu.OptionsMenu;
 import com.micaelops.livebrief2.utils.MethodUtils;
@@ -72,6 +73,9 @@ public class AuthMenu extends OptionsMenu {
 
         String username = methodUtils.getStringFromInput((Scanner) scanner, "Please input a username " ,"username", 5);
 
+        if(username.isEmpty())
+            return;
+
         if(Database.getInstance().existsUsername(username)) {
             System.out.println("That username already exists");
             return;
@@ -80,31 +84,25 @@ public class AuthMenu extends OptionsMenu {
         String name = methodUtils.getStringFromInput((Scanner) scanner, "Please insert your name ", "name", 3);
         int age = methodUtils.getIntFromInput((Scanner) scanner, "Please insert your age", "age", 0);
 
-        if(name.isEmpty() || username.isEmpty() || age == 0) {
-            System.out.println("Invalid data detected while creating account! Try again!");
+        if(name.isEmpty() || age == 0)
             return;
-        }
 
         if(!isparent) {
 
-            int pin = methodUtils.getIntFromInput((Scanner) scanner, "Please input your PIN", "PIN", 4);
+            int pin = methodUtils.getIntFromInput((Scanner) scanner, "Please input your PIN", "PIN", 3);
 
-            if(pin == 0) {
-                System.out.println("Invalid PIN");
+            if(pin == 0)
                 return;
-            }
 
-            account = new ChildAccount(username, ""+pin, name, age, 0L);
+            account = new ChildAccount(username, ""+pin, name, age, 0L, new Item[27]);
         } else {
 
             String password = methodUtils.getStringFromInput((Scanner) scanner, "Please input your password ", "password", 5);
 
-            if(password.isEmpty()) {
-                System.out.println("Invalid password");
+            if(password.isEmpty())
                 return;
-            }
 
-            account = new ParentAccount(username, password, name, age, new String[5]);
+            account = new ParentAccount(username, password, name, age, new String[10]);
         }
 
         Database.getInstance().addAccount(account);

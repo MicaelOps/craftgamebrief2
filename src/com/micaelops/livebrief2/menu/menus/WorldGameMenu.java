@@ -4,17 +4,26 @@ import com.micaelops.livebrief2.account.ChildAccount;
 import com.micaelops.livebrief2.database.Database;
 import com.micaelops.livebrief2.game.Item;
 import com.micaelops.livebrief2.game.ItemType;
+import com.micaelops.livebrief2.game.Questions;
 import com.micaelops.livebrief2.menu.Menu;
 import com.micaelops.livebrief2.menu.OptionsMenu;
 import com.micaelops.livebrief2.utils.MethodUtils;
 
+import java.util.Arrays;
 import java.util.Scanner;
 
 
 /**
  * Extension of the ChildGameMenu
+ * by design everything would be on ChildGameMenu but that would decrease
+ * readability of the code.
  *
+ * This Menu is responsible for the Child playing the actual game.
+ * By design as the child 'explores the world' to collect resources it will
+ * be asked questions appropriate to the child's level in order to receive resources
  *
+ * In this case the child has to manually choose whether it wants to explore the world
+ * or do something else.
  */
 public class WorldGameMenu extends OptionsMenu {
 
@@ -47,11 +56,47 @@ public class WorldGameMenu extends OptionsMenu {
         addOption(4, this::exitGame);
     }
 
-    private void exploreWorld(Object object){
+    private void exploreWorld(Object scanner){
 
+        // Ensures that the user returns to the options stage
+        setStage(OPTIONS_STAGE);
+
+        try {
+
+            System.out.println("Exploring the world....");
+            Thread.sleep(3000L); // wait 3 seconds
+
+            System.out.println("You found an item!");
+            System.out.println("Before you are able to obtain it, you must answer correctly the question.");
+
+            Questions question = Questions.getQuestionByProgress(account.getProgress());
+
+            if(question == null){
+                System.out.println("Something went wrong while getting the question!");
+                return;
+            }
+
+            if(MethodUtils.getInstance().getStringFromInput((Scanner) scanner, question.getQuestionText(), "answer", 1).equalsIgnoreCase(question.getAnswer())){
+                System.out.println("Congratulations! Your answer is correct.");
+                System.out.println("You gained " + (question.getProgressRequired()+10) + "XP from getting the correct answer.");
+                account.setProgress(account.getProgress() + question.getProgressRequired() + 10);
+            } else {
+                System.out.println("Incorrect answer...");
+                System.out.println("The item mysteriously disappears.....");
+                System.out.println("You lost " + (question.getProgressRequired() +10) + "XP from getting the incorrect answer.");
+                account.setProgress(account.getProgress() - question.getProgressRequired() - 10);
+            }
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
     private void craftItems(Object scanner){
+
         showManual();
+
+        // Ensures that the user returns to the options stage
+        setStage(OPTIONS_STAGE);
 
         System.out.println("Which item do you want to craft: ");
 
@@ -62,19 +107,36 @@ public class WorldGameMenu extends OptionsMenu {
             return;
         }
 
-        setStage(OPTIONS_STAGE);
+        for(Item requirements : itemType.getComponents()) {
+            if(account.findItemSlot(requirements) == -1) {
+                System.out.println("You don't have the necessary items to craft this item!");
+                return;
+            }
+        }
+
+        // Remove components from child's inventory
+        Arrays.stream(itemType.getComponents()).forEach(account::removeItem);
+
+        account.addItem(new Item(itemType, 1));
+
+        System.out.println("Item successfully crafted!");
+
     }
 
+
     private void showManual() {
+
         System.out.println("---------------------- Manual ---------------------- ");
+
         for(ItemType item : ItemType.getItemsWithComponents()){
 
             System.out.println(" Name: "+item.getName());
-
+            System.out.println(" Components: ");
             for(Item components : item.getComponents()) {
                 System.out.println("    - "+components.getAmount() + " "+components.getItemType().getName() );
             }
         }
+
         System.out.println("---------------------- Manual ---------------------- ");
     }
 
@@ -82,22 +144,18 @@ public class WorldGameMenu extends OptionsMenu {
 
         setStage(OPTIONS_STAGE);
 
-        if(account.getItems().isEmpty()) {
-            System.out.println("You have no items!");
-            return;
-        }
-
         System.out.println("List of your items: ");
 
         for(Item item : account.getItems()){
-            System.out.println("    - Item name: "+item.getItemType().name() + "   Amount: "+item.getAmount());
+            if(item != null)
+                System.out.println("    - Item name: "+item.getItemType().name() + "   Amount: "+item.getAmount());
         }
 
     }
 
     /**
-     * Exi
-     * @param object
+     * Exit game
+     * @param object nothing is passed here
      */
     private void exitGame(Object object){
         System.out.println("Saving game...");

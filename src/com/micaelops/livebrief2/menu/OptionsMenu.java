@@ -10,11 +10,12 @@ import java.util.function.Consumer;
  * An extension of the Menu interface where it
  * specializes in providing options for the user
  *
- * OptionsMenu starts by loading its options and then printing those options
- * to the user where he will choose and invoke that option method stored in the hashmap.
+ * OptionsMenu extension starts by loading its options on Menu.welcome()
+ * Afterwards, on the Menu.process() it prints the options and then the user
+ * selects the option
  *
- * The menu stage is expected to return to its OPTIONS_STAGE after finishing processing a
- * specific option unless further processing is required.
+ * Every option is a stage in the menu hence everytime the Menu.process() is finished
+ * if the menu is not finished the user will be redirected to that option again.
  *
  *
  */
@@ -38,7 +39,6 @@ public abstract class OptionsMenu implements Menu{
         options = new HashMap<>();
         OPTIONS_STAGE = 0;
     }
-
 
     /**
      * Loads options and sets the stage to OPTIONS_STAGE

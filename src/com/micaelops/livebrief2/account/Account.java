@@ -82,9 +82,8 @@ package com.micaelops.livebrief2.account;
 
      /**
       * Translates the Data in the Account object
-      * into a String
-      * @return data in string form
+      * into a String Array
+      * @return data in string array form
       */
-    public abstract String writeToString();
-
- }
+    public abstract String[] writeToStringArray();
+}
