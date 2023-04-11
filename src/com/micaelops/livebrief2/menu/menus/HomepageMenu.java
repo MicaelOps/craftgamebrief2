@@ -23,18 +23,18 @@ public class HomepageMenu extends OptionsMenu {
     @Override
     public void welcome() {
 
-        System.out.println("Hello, Welcome to our Intelligentcraft Game");
-        System.out.println("Please identify yourself by typing one of the options.");
 
+        System.out.println("Hello, Welcome to our Intelligentcraft Game");
+        System.out.println("Make sure to run this on a command line that enables you to leave at any stage with Ctrl + C");
+        System.out.println("Please identify yourself by typing one of the options.");
         super.welcome();
     }
 
 
     @Override
     public void printOptions() {
-        System.out.println("Options:");
-        System.out.println("    1 - Child");
-        System.out.println("    2 - Parent");
+        System.out.println("1 - Child");
+        System.out.println("2 - Parent");
     }
 
     @Override

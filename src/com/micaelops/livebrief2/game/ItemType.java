@@ -43,7 +43,7 @@ public enum ItemType {
      * @return array with items that have components
      */
     public static ItemType[] getItemsWithComponents(){
-        return (ItemType[]) Arrays.stream(values()).filter(itemType -> itemType.components.length > 0).toArray();
+        return Arrays.stream(values()).filter(itemType -> itemType.components.length > 0).toArray(ItemType[]::new);
     }
 
     /**

@@ -4,6 +4,7 @@ import com.micaelops.livebrief2.database.Database;
 import com.micaelops.livebrief2.menu.Menu;
 import com.micaelops.livebrief2.menu.menus.HomepageMenu;
 
+
 public class Main {
 
     public static void main(String[] args) {
@@ -37,7 +38,7 @@ public class Main {
              */
             if(menu.isFinished()) {
 
-                menu = menu.getNewMenu();
+                menu = menu.nextMenu();
 
                 // Adds a few empty lines (platform independent)
                 System.out.println(System.lineSeparator());

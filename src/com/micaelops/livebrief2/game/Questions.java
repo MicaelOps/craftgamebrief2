@@ -14,7 +14,7 @@ import java.util.Arrays;
  */
 public enum Questions {
 
-    CLOUDS("What are clouds made of?", "water gas", 0),
+    CLOUDS("What are clouds made of?", "water liquid", 0),
     SKY_COLOR("Why is the sky blue?", "sun radiation", 0),
     OREO("If you had to measure your height in Oreos, how many Oreos tall do you think you would be?", "7", 100);
 

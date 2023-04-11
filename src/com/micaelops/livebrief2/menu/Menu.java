@@ -50,7 +50,7 @@ public interface Menu {
      * Gets the new menu for the Main loop to change
      * @return new Menu
      */
-    Menu getNewMenu();
+    Menu nextMenu();
 
     /**
      * checks if the menu is finished

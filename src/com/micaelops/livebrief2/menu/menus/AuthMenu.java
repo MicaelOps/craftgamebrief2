@@ -45,12 +45,14 @@ public class AuthMenu extends OptionsMenu {
 
     private void loginAccount(Object objscanner){
 
+        setStage(OPTIONS_STAGE);
+
         MethodUtils methodUtils = MethodUtils.getInstance();
 
         String username, password;
 
         username = methodUtils.getStringFromInput((Scanner) objscanner, "Please input your username " ,"username", 5);
-        password = methodUtils.getStringFromInput((Scanner) objscanner, "Please input your "+(isparent ? "password" : "PIN"), "password", 5);
+        password = methodUtils.getStringFromInput((Scanner) objscanner, "Please input your "+(isparent ? "password" : "PIN"), "password", 3);
 
         Database database = Database.getInstance();
 
@@ -60,6 +62,11 @@ public class AuthMenu extends OptionsMenu {
         }
 
         account = database.getAccount(username);
+
+        if((isparent && account instanceof ChildAccount) || (!isparent && account instanceof ParentAccount)){
+            System.out.println("You are not allowed to access other people account!");
+            return;
+        }
 
         System.out.println("Successfully authenticated!");
 

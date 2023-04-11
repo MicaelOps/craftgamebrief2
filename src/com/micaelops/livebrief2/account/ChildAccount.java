@@ -3,6 +3,8 @@ package com.micaelops.livebrief2.account;
 import com.micaelops.livebrief2.game.Item;
 import com.micaelops.livebrief2.game.ItemType;
 
+import java.util.Arrays;
+
 
 public class ChildAccount extends Account{
 
@@ -24,11 +26,19 @@ public class ChildAccount extends Account{
     }
 
     public void setProgress(long progress) {
-        this.progress = progress;
+
+        if(progress >= 0)
+            this.progress = progress;
+
     }
 
+
+    public boolean isFirstTime(){
+        return getProgress() == 0;
+    }
     public void resetWorldStats(){
         setProgress(0);
+        Arrays.fill(inventory, null);
     }
 
     @Override
@@ -49,9 +59,9 @@ public class ChildAccount extends Account{
     @Override
     public String[] writeToStringArray() {
 
-        String[] data = new String[14]; // 5 from account variables + accountType and 10 from children
+        String[] data = new String[33]; // 5 from account variables + 27 inventory  + 1 progress
 
-        data[0] = "parent";
+        data[0] = "child";
         data[1] = getName();
         data[2] = getUsername();
         data[3] = getPassword();

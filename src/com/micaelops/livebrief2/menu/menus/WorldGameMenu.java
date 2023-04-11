@@ -1,7 +1,6 @@
 package com.micaelops.livebrief2.menu.menus;
 
 import com.micaelops.livebrief2.account.ChildAccount;
-import com.micaelops.livebrief2.database.Database;
 import com.micaelops.livebrief2.game.Item;
 import com.micaelops.livebrief2.game.ItemType;
 import com.micaelops.livebrief2.game.Questions;
@@ -41,11 +40,9 @@ public class WorldGameMenu extends OptionsMenu {
 
     @Override
     public void printOptions() {
-        System.out.println("Choose your options:");
         System.out.println("1 - Explore World");
         System.out.println("2 - Inventory");
         System.out.println("3 - Craft Items");
-        System.out.println("4 - Exit game");
     }
 
     @Override
@@ -53,7 +50,6 @@ public class WorldGameMenu extends OptionsMenu {
         addOption(1, this::exploreWorld);
         addOption(2, this::showInventory);
         addOption(3, this::craftItems);
-        addOption(4, this::exitGame);
     }
 
     private void exploreWorld(Object scanner){
@@ -79,8 +75,15 @@ public class WorldGameMenu extends OptionsMenu {
             if(MethodUtils.getInstance().getStringFromInput((Scanner) scanner, question.getQuestionText(), "answer", 1).equalsIgnoreCase(question.getAnswer())){
                 System.out.println("Congratulations! Your answer is correct.");
                 System.out.println("You gained " + (question.getProgressRequired()+10) + "XP from getting the correct answer.");
+
+                ItemType itemType = ItemType.getRandomItem();
+                System.out.println("You obtained a "+itemType.getName());
+
                 account.setProgress(account.getProgress() + question.getProgressRequired() + 10);
+                account.addItem(new Item(itemType, 1));
+
             } else {
+
                 System.out.println("Incorrect answer...");
                 System.out.println("The item mysteriously disappears.....");
                 System.out.println("You lost " + (question.getProgressRequired() +10) + "XP from getting the incorrect answer.");
@@ -153,14 +156,6 @@ public class WorldGameMenu extends OptionsMenu {
 
     }
 
-    /**
-     * Exit game
-     * @param object nothing is passed here
-     */
-    private void exitGame(Object object){
-        System.out.println("Saving game...");
-        Database.getInstance().saveData();
-        setStage(FINISHED_STAGE);
-    }
+
 
 }

@@ -1,5 +1,6 @@
 package com.micaelops.livebrief2.menu;
 
+import com.micaelops.livebrief2.database.Database;
 import com.micaelops.livebrief2.utils.MethodUtils;
 
 import java.util.HashMap;
@@ -31,6 +32,9 @@ public abstract class OptionsMenu implements Menu{
     // Tracker of menu stages
     private int stage;
 
+    // Tracker of whether the user has chosen to exit the menu
+    private boolean exit = false;
+
 
     /**
      * Initializing variables
@@ -40,6 +44,7 @@ public abstract class OptionsMenu implements Menu{
         OPTIONS_STAGE = 0;
     }
 
+
     /**
      * Loads options and sets the stage to OPTIONS_STAGE
      * More documentation on Menu interface
@@ -48,6 +53,8 @@ public abstract class OptionsMenu implements Menu{
     public void welcome() {
         loadOptions();
         setStage(OPTIONS_STAGE);
+
+        options.put(options.size() + 1, this::handleExit);
     }
 
     /**
@@ -95,13 +102,17 @@ public abstract class OptionsMenu implements Menu{
 
         if(getStage() == OPTIONS_STAGE) {
 
+            System.out.println("Choose your options");
+
             // Prints options
             printOptions();
+
+            System.out.println(options.size() + " - Exit");
 
             int option = MethodUtils.getInstance().getIntFromInput(scanner, 1);
 
             // Checks if the option is valid
-            if(option == 0 || !options.containsKey(option)){
+            if(option == 0 || !options.containsKey(option)) {
                 System.out.println("Invalid option");
                 return;
             }
@@ -118,8 +129,9 @@ public abstract class OptionsMenu implements Menu{
         options.get(getStage()).accept(scanner);
     }
 
-
-
+    public boolean isExit(){
+        return exit;
+    }
     /**
      * Prints option to user
      */
@@ -129,4 +141,18 @@ public abstract class OptionsMenu implements Menu{
      * Puts all the options into the Hashmap
      */
     public abstract void loadOptions();
+
+    private void handleExit(Object object) {
+        Database.getInstance().saveData();
+        setStage(FINISHED_STAGE);
+
+        exit = true;
+    }
+
+    public abstract Menu getNewMenu();
+
+    @Override
+    public Menu nextMenu() {
+        return isExit() ? null : getNewMenu();
+    }
 }

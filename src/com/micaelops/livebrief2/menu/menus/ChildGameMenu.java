@@ -21,11 +21,9 @@ public class ChildGameMenu extends OptionsMenu {
 
     @Override
     public void printOptions() {
-        System.out.println("Choose your options");
         System.out.println("1 - Create new world");
         System.out.println("2 - Load world");
         System.out.println("3 - View leaderboard");
-        System.out.println("4 - Exit Game");
     }
 
     @Override
@@ -46,12 +44,13 @@ public class ChildGameMenu extends OptionsMenu {
 
         if((boolean)isnewworld) {
 
-            if(account.findNearestEmptySlot() == 0 && account.getProgress() == 0) {
+            if(account.isFirstTime()) {
                 System.out.println("You haven't started a world!");
                 return;
             }
 
             account.resetWorldStats();
+            account.setProgress(1);
         }
 
         nextMenu = new WorldGameMenu(account);
@@ -69,15 +68,12 @@ public class ChildGameMenu extends OptionsMenu {
 
         ChildAccount[] accounts = MethodUtils.getInstance().sortChildren(Database.getInstance().getAllAccounts().stream().filter(account1 -> account1 instanceof ChildAccount).toArray(ChildAccount[]::new));
 
-        if(accounts[0] == null)
-            return;
-
         System.out.println("--------------- Leaderboard ---------------");
 
         int place = 1; // starts at the first place
 
         for(ChildAccount child : accounts) {
-            System.out.println(" "+place+" - " + child.getName() +" (Age: "+child.getAge()+")" + " Progress: "+child.getProgress());
+            System.out.println(" "+place+" - " + child.getName() +" (Age: "+child.getAge()+")" + " Progress: "+child.getProgress()+"XP");
             place++;
         }
         System.out.println("--------------- Leaderboard ---------------");

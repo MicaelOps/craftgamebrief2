@@ -83,6 +83,7 @@ public class Database {
             return true;
         } catch (Exception e) {
             System.out.println("Error: Invalid data detected! Stopping loading...");
+            e.printStackTrace();
         }
         return false;
     }
@@ -102,6 +103,7 @@ public class Database {
                 // Remove the last :
                 outputStream.write(stringBuilder.substring(0, stringBuilder.length()-1));
 
+                // Divides each data by newline
                 outputStream.newLine();
             }
         } catch (IOException e) {

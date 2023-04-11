@@ -20,7 +20,6 @@ public class ParentGameMenu extends OptionsMenu {
 
     @Override
     public void printOptions() {
-        System.out.println("Choose your options");
         System.out.println("1 - View your children's progression leaderboard");
         System.out.println("2 - View All children leaderboard");
         System.out.println("3 - Change Child's PIN");
@@ -42,7 +41,7 @@ public class ParentGameMenu extends OptionsMenu {
 
     private void addChildren(Object scanner) {
 
-        String username = MethodUtils.getInstance().getStringFromInput((Scanner) scanner, "Please input your child username", "child", 2);
+        String username = MethodUtils.getInstance().getStringFromInput((Scanner) scanner, "Please input your child username", "username", 2);
 
         if(username.isEmpty() || account.hasChild(username) || !Database.getInstance().existsUsername(username)){
             System.out.println("Invalid username");
@@ -64,6 +63,7 @@ public class ParentGameMenu extends OptionsMenu {
 
         if(!account.hasChildren()) {
             System.out.println("You don't have any children");
+            setStage(OPTIONS_STAGE);
             return;
         }
 
@@ -97,8 +97,8 @@ public class ParentGameMenu extends OptionsMenu {
         
         setStage(OPTIONS_STAGE);
 
-        if(accounts[0] == null) {
-            System.out.println("You don't have any children!");
+        if(accounts.length == 0 || accounts[0] == null) {
+            System.out.println("No child was found to display.");
             return;
         }
 
@@ -107,7 +107,7 @@ public class ParentGameMenu extends OptionsMenu {
 
         for(int i = 0; i < accounts.length; i++) {
             ChildAccount child = accounts[i];
-            System.out.println(" "+i+" - " + child.getName() +" (Age: "+child.getAge()+")" + " Progress: "+child.getProgress());
+            System.out.println(" "+i+" - " + child.getName() +" (Age: "+child.getAge()+")" + " Progress: "+child.getProgress()+"XP");
 
         }
         System.out.println("--------------- Leaderboard ---------------");

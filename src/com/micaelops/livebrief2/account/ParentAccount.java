@@ -18,7 +18,7 @@ public class ParentAccount extends Account{
 
     public void addChild(String child){
         for(int i = 0; i < children.length; i++){
-            if(children[i] == null || children[i].isEmpty()) {
+            if(children[i] == null || children[i].equalsIgnoreCase("null")) {
                 children[i] = child;
                 return;
             }
@@ -26,10 +26,10 @@ public class ParentAccount extends Account{
     }
 
     public boolean hasChildren() {
-        return children[0] !=null && !children[0].isEmpty();
+        return children[0] !=null && !children[0].isEmpty() && !children[0].equalsIgnoreCase("null");
     }
     public boolean hasChild(String child) {
-        return Arrays.stream(children).anyMatch(streamChild -> streamChild.equalsIgnoreCase(child));
+        return Arrays.stream(children).anyMatch(streamchild -> streamchild.equalsIgnoreCase(child));
     }
     public String[] getChildren() {
         return children;
@@ -44,7 +44,7 @@ public class ParentAccount extends Account{
 
     @Override
     public String[] writeToStringArray() {
-        String[] data = new String[14]; // 5 from account variables + accountType and 10 from children
+        String[] data = new String[15]; // 5 from account variables + accountType and 10 from children
         data[0] = "parent";
         data[1] = getName();
         data[2] = getUsername();

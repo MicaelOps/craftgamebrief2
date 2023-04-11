@@ -107,15 +107,15 @@ public class MethodUtils {
 
         ChildAccount[] sortedList = new ChildAccount[usernames.length];
 
-
         for(int sortelement = 0; sortelement < sortedList.length; sortelement++) {
 
             for(int sortnext = 0; sortnext < sortedList.length; sortnext++) {
 
+
                 if(usernames[sortelement] == null || usernames[sortnext] == null)
                     continue;
 
-                if(usernames[sortelement].getProgress() < usernames[sortnext].getProgress()){
+                if(usernames[sortelement].getProgress() <= usernames[sortnext].getProgress()){
                     ChildAccount account = usernames[sortnext];
                     sortedList[sortnext] = usernames[sortelement];
                     sortedList[sortelement] = account;
