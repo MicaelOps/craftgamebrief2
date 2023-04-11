@@ -12,11 +12,12 @@ package com.micaelops.livebrief2.account;
     // Name of the user and username
     private final String name, username;
 
-     // Age of the user (changeable but not by design)
-     private final int age;
+    // Age of the user (changeable but not by design)
+    private final int age;
 
-     // Password (changeable)
+    // Password (changeable)
     private String password;
+
 
     public Account(){
         this.username = "";
@@ -31,19 +32,18 @@ package com.micaelops.livebrief2.account;
         this.password = password;
         this.age = age;
     }
-
-     /**
-      * Gets the name of the account
-      * @return name
-      */
+    /**
+     * Gets the name of the account
+     * @return name
+     */
     public String getName() {
         return name;
     }
 
-     /**
-      * Gets the username of the account
-      * @return username
-      */
+    /**
+     * Gets the username of the account
+     * @return username
+     */
     public String getUsername() {
         return username;
     }
@@ -52,38 +52,42 @@ package com.micaelops.livebrief2.account;
       * Gets the Password of the account
       * @return password
       */
+
     public String getPassword() {
         return password;
     }
 
-     /**
-      * Gets the age of the user
-      * @return age
-      */
+    /**
+     * Gets the age of the user
+     * @return age
+     */
     public int getAge() {
         return age;
     }
 
-     /**
-      * Sets the password
-      * @param password new password
-      */
+    /**
+     * Sets the password
+     * @param password new password
+     */
+
     public void setPassword(String password) {
         this.password = password;
     }
 
-     /**
-      * Translates Data stored in the Database file into
-      * a Account object
-      * @param data array containing data
-      * @return Account object
-      */
+    /**
+     * Translates Data stored in the String array file into
+     * an Account object
+     * @param data array containing data
+     * @return Account object
+     */
+
     public abstract Account readFromStringArray(String[] data);
 
-     /**
-      * Translates the Data in the Account object
-      * into a String Array
-      * @return data in string array form
-      */
+    /**
+     * Translates the Data in the Account object
+     * into a String Array
+     * @return data in string array form
+     */
+
     public abstract String[] writeToStringArray();
 }

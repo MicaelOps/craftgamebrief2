@@ -60,7 +60,7 @@ public class WorldGameMenu extends OptionsMenu {
         try {
 
             System.out.println("Exploring the world....");
-            Thread.sleep(3000L); // wait 3 seconds
+            Thread.sleep(2000L); // wait 2 seconds
 
             System.out.println("You found an item!");
             System.out.println("Before you are able to obtain it, you must answer correctly the question.");
@@ -96,12 +96,13 @@ public class WorldGameMenu extends OptionsMenu {
     }
     private void craftItems(Object scanner){
 
+        if(account.findNearestEmptySlot() == -1){
+            System.out.println("Inventory is full!");
+            setStage(OPTIONS_STAGE);
+            return;
+        }
+
         showManual();
-
-        // Ensures that the user returns to the options stage
-        setStage(OPTIONS_STAGE);
-
-        System.out.println("Which item do you want to craft: ");
 
         ItemType itemType = ItemType.getItemByName(MethodUtils.getInstance().getStringFromInput((Scanner) scanner, "Which item do you want to craft: ", "Item", 3));
 
@@ -123,6 +124,7 @@ public class WorldGameMenu extends OptionsMenu {
         account.addItem(new Item(itemType, 1));
 
         System.out.println("Item successfully crafted!");
+        setStage(OPTIONS_STAGE);
 
     }
 
@@ -145,17 +147,17 @@ public class WorldGameMenu extends OptionsMenu {
 
     private void showInventory(Object object){
 
-        setStage(OPTIONS_STAGE);
-
-        System.out.println("List of your items: ");
+        System.out.println("---------------------- Inventory ---------------------- ");
 
         for(Item item : account.getItems()){
             if(item != null)
                 System.out.println("    - Item name: "+item.getItemType().name() + "   Amount: "+item.getAmount());
         }
 
+        System.out.println("---------------------- Inventory ---------------------- ");
+
+        setStage(OPTIONS_STAGE);
+
+
     }
-
-
-
 }

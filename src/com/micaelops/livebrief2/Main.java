@@ -4,7 +4,6 @@ import com.micaelops.livebrief2.database.Database;
 import com.micaelops.livebrief2.menu.Menu;
 import com.micaelops.livebrief2.menu.menus.HomepageMenu;
 
-
 public class Main {
 
     public static void main(String[] args) {
@@ -15,18 +14,18 @@ public class Main {
             System.exit(-1);
         }
 
-        // Beginning Menu
+        // Initializes the Homepage Menu
         Menu menu = new HomepageMenu();
 
-        // executes the homepage menu welcome
+        // Executes the homepage menu welcome
         menu.welcome();
 
-        // tracks whether there is no more menus to process
+        // Tracks whether there is no more menus to process
         boolean finished = false;
 
         do {
 
-            // handles input
+            // Handles input
             menu.process();
 
             /*
@@ -40,7 +39,7 @@ public class Main {
 
                 menu = menu.nextMenu();
 
-                // Adds a few empty lines (platform independent)
+                // Adds a few empty lines to improve clarity (platform independent)
                 System.out.println(System.lineSeparator());
                 System.out.println(System.lineSeparator());
 
@@ -52,9 +51,6 @@ public class Main {
 
         } while (!finished);
 
-        /* When this section is reached the program saves data and closes */
-
-        Database.getInstance().saveData();
         System.out.println("Thank you for using our program!");
     }
 }

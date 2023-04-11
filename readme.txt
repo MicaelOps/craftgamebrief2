@@ -10,3 +10,6 @@
  * We don't mention in the design but the age has to be modifiable
  * There can only be one world per child account
  * Only children can play the game
+
+ * There is no Mother or Father only Parent
+ * Parent and child relationship is One-to-many not many-to-many (like some accidents in the real world)

@@ -7,6 +7,7 @@ import com.micaelops.livebrief2.menu.Menu;
 import com.micaelops.livebrief2.menu.OptionsMenu;
 import com.micaelops.livebrief2.utils.MethodUtils;
 
+import javax.xml.crypto.Data;
 import java.util.Scanner;
 
 public class ParentGameMenu extends OptionsMenu {
@@ -41,15 +42,22 @@ public class ParentGameMenu extends OptionsMenu {
 
     private void addChildren(Object scanner) {
 
+        Database database = Database.getInstance();
+
         String username = MethodUtils.getInstance().getStringFromInput((Scanner) scanner, "Please input your child username", "username", 2);
 
-        if(username.isEmpty() || account.hasChild(username) || !Database.getInstance().existsUsername(username)){
+        if(username.isEmpty() || account.hasChild(username) || !database.existsUsername(username)){
             System.out.println("Invalid username");
             return;
         }
 
-        if(Database.getInstance().getAccount(username) instanceof ParentAccount) {
+        if(database.getAccount(username) instanceof ParentAccount) {
             System.out.println("That username belongs to a parent.");
+            return;
+        }
+
+        if(database.getAllAccounts().stream().anyMatch(allAccounts -> allAccounts instanceof ParentAccount && ((ParentAccount) allAccounts).hasChild(username))){
+            System.out.println("That child belongs to another parent!");
             return;
         }
         
@@ -94,22 +102,24 @@ public class ParentGameMenu extends OptionsMenu {
 
 
     private void printLeaderboard(ChildAccount[] accounts){
-        
-        setStage(OPTIONS_STAGE);
 
-        if(accounts.length == 0 || accounts[0] == null) {
+        if(accounts[0] == null) {
             System.out.println("No child was found to display.");
             return;
         }
 
         System.out.println("--------------- Leaderboard ---------------");
 
-
         for(int i = 0; i < accounts.length; i++) {
+
             ChildAccount child = accounts[i];
-            System.out.println(" "+i+" - " + child.getName() +" (Age: "+child.getAge()+")" + " Progress: "+child.getProgress()+"XP");
+
+            if(child != null)
+                System.out.println(" "+(i+1)+" - " + child.getName() +" (Age: "+child.getAge()+")" + " Progress: "+child.getProgress()+"XP");
 
         }
         System.out.println("--------------- Leaderboard ---------------");
+
+        setStage(OPTIONS_STAGE);
     }
 }

@@ -2,7 +2,7 @@ package com.micaelops.livebrief2.menu;
 
 /**
  * This class purpose is to introduce a menu system
- * where it handles user input.
+ * where it handles user input efficiently.
  *
  * Every menu is divided into stages where
  * 'FINISHED_STAGE' represents when the menu is finished
@@ -19,43 +19,47 @@ public interface Menu {
     // Default Finished stage value
     int FINISHED_STAGE = 100;
 
-
     /**
      * Welcome greeting for the menu.
      * Only runs once.
      */
+
     void welcome();
 
     /**
-     * Handles menu
+     * Handles input
      * This method always runs until stage of the menu is finished
      */
-    void process();
 
+    void process();
 
     /**
      * Sets a new stage of the menu
      * @param newstage value
      */
+
     void setStage(int newstage);
 
 
     /**
      * Tracks the stage of where the menu is at.
-     * @return stage value
+     * @return stage integer value
      */
+
     int getStage();
 
     /**
      * Gets the new menu for the Main loop to change
      * @return new Menu
      */
+
     Menu nextMenu();
 
     /**
-     * checks if the menu is finished
+     * Checks if the menu is finished
      * @return boolean true or false
      */
+
     default boolean isFinished() {
         return getStage() == FINISHED_STAGE;
     }

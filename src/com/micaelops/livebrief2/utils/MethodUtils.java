@@ -5,13 +5,11 @@ import com.micaelops.livebrief2.database.Database;
 
 import java.util.Scanner;
 
-
 /***
- * This class purpose is to avoid creating
- * the same lines of code for different purposes
+ * The purpose of this class is to avoid creating
+ * the same lines of code for different uses
  */
 public class MethodUtils {
-
 
     // Singleton design
     private static MethodUtils instance;
@@ -32,21 +30,22 @@ public class MethodUtils {
         return instance;
     }
 
-
     /**
-     * Gets input from command line and validates input with
-     * certain minimum characters required and returns as text
-     *
-     * Any invalid input returns as empty string.
+     * Prints a message to the user before
+     * Getting input from command line and validates with a
+     * certain minimum characters required and returns as String
      *
      * @param scanner Scanner object
      * @param askMsg Introduction message before taking the input from the user
      * @param type specifies what kind of data we are dealing with
      * @param min characters required for the input to be considered valid
-     * @return input for text
+     * @return If minimum characters is satisfied return String of the input from commandline otherwise empty String
      */
+
     public String getStringFromInput(Scanner scanner, String askMsg , String type, int min) {
+
         System.out.println(askMsg);
+
         String input = scanner.nextLine();
 
         if(input.length() < min) {
@@ -57,16 +56,15 @@ public class MethodUtils {
     }
 
     /**
-     * Gets input from command line and validates input with
+     * Prints a message to the user before
+     * Getting input from command line and validates with a
      * certain minimum characters required and returns as integer
-     *
-     * Any invalid input returns as 0.
      *
      * @param scanner Scanner object
      * @param askMsg Introduction message before taking the input from the user
      * @param type specifies what kind of data we are dealing with
      * @param min characters required for the input to be considered valid
-     * @return input for text
+     * @return If minimum characters is satisfied return int of the input from commandline otherwise 0
      */
 
     public int getIntFromInput(Scanner scanner, String askMsg , String type, int min) {
@@ -85,7 +83,7 @@ public class MethodUtils {
      *
      * @param scanner Scanner object
      * @param min characters required for the input to be considered valid
-     * @return input for text
+     * @return If minimum characters is satisfied return int of the input from commandline otherwise 0
      */
 
     public int getIntFromInput(Scanner scanner, int min) {
@@ -97,39 +95,37 @@ public class MethodUtils {
     }
 
     /**
-     * Sorts ChildAcoount by their progress in a
-     * bubble sort style.
+     * Sorts an array of ChildAccounts
+     * Bubble sort style.
      *
      * @param usernames array that contains the childaccounts
      * @return sorted array
      */
+
     public ChildAccount[] sortChildren(ChildAccount[] usernames){
 
-        ChildAccount[] sortedList = new ChildAccount[usernames.length];
+        for(int sortelement = 0; sortelement < usernames.length; sortelement++) {
 
-        for(int sortelement = 0; sortelement < sortedList.length; sortelement++) {
-
-            for(int sortnext = 0; sortnext < sortedList.length; sortnext++) {
-
+            for(int sortnext = 0; sortnext < usernames.length; sortnext++) {
 
                 if(usernames[sortelement] == null || usernames[sortnext] == null)
                     continue;
 
                 if(usernames[sortelement].getProgress() <= usernames[sortnext].getProgress()){
                     ChildAccount account = usernames[sortnext];
-                    sortedList[sortnext] = usernames[sortelement];
-                    sortedList[sortelement] = account;
+                    usernames[sortnext] = usernames[sortelement];
+                    usernames[sortelement] = account;
                 }
             }
         }
-        return sortedList;
+        return usernames;
     }
 
     /**
      * Sorts usernames by their ChildAccount progress in a
-     * bubble sort style.
+     * Bubble sort style.
      *
-     * @param usernames array that contains the usernames
+     * @param usernames String array that contains the usernames
      * @return sorted array
      */
 
@@ -143,5 +139,4 @@ public class MethodUtils {
         }
         return sortChildren(sortedList);
     }
-
 }

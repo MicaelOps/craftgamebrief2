@@ -21,15 +21,12 @@ public class AuthMenu extends OptionsMenu {
 
     public AuthMenu(boolean isparent) {
         this.isparent = isparent;
-
     }
-
 
     @Override
     public void printOptions() {
         System.out.println("1 - Register new account ");
         System.out.println("2 - Log in");
-
     }
 
     @Override
@@ -44,8 +41,6 @@ public class AuthMenu extends OptionsMenu {
     }
 
     private void loginAccount(Object objscanner){
-
-        setStage(OPTIONS_STAGE);
 
         MethodUtils methodUtils = MethodUtils.getInstance();
 
@@ -91,23 +86,29 @@ public class AuthMenu extends OptionsMenu {
         String name = methodUtils.getStringFromInput((Scanner) scanner, "Please insert your name ", "name", 3);
         int age = methodUtils.getIntFromInput((Scanner) scanner, "Please insert your age", "age", 0);
 
-        if(name.isEmpty() || age == 0)
+        if(name.isEmpty() || age == 0) {
+            System.out.println("Invalid data detected. Cancelling process...");
             return;
+        }
 
         if(!isparent) {
 
             int pin = methodUtils.getIntFromInput((Scanner) scanner, "Please input your PIN", "PIN", 3);
 
-            if(pin == 0)
+            if(pin == 0) {
+                System.out.println("Invalid data detected. Cancelling process...");
                 return;
+            }
 
             account = new ChildAccount(username, ""+pin, name, age, 0L, new Item[27]);
         } else {
 
             String password = methodUtils.getStringFromInput((Scanner) scanner, "Please input your password ", "password", 5);
 
-            if(password.isEmpty())
+            if(password.isEmpty()) {
+                System.out.println("Invalid data detected. Cancelling process...");
                 return;
+            }
 
             account = new ParentAccount(username, password, name, age, new String[10]);
         }

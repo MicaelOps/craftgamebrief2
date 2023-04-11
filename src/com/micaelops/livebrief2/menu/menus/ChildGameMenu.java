@@ -40,17 +40,21 @@ public class ChildGameMenu extends OptionsMenu {
         return nextMenu;
     }
 
-    private void handleWorld(Object isnewworld){
+    private void handleWorld(boolean isNewWorld){
 
-        if((boolean)isnewworld) {
+        if(isNewWorld) {
 
-            if(account.isFirstTime()) {
-                System.out.println("You haven't started a world!");
-                return;
-            }
+
+            System.out.println("Welcome to the new world!");
+            System.out.println("Daily Bonus EXP for creating new world: 1 XP");
 
             account.resetWorldStats();
             account.setProgress(1);
+
+        } else if(account.isFirstTime()) {
+            setStage(OPTIONS_STAGE);
+            System.out.println("You haven't started a world!");
+            return;
         }
 
         nextMenu = new WorldGameMenu(account);
@@ -64,8 +68,6 @@ public class ChildGameMenu extends OptionsMenu {
 
     private void printLeaderboard(Object object){
 
-        setStage(OPTIONS_STAGE);
-
         ChildAccount[] accounts = MethodUtils.getInstance().sortChildren(Database.getInstance().getAllAccounts().stream().filter(account1 -> account1 instanceof ChildAccount).toArray(ChildAccount[]::new));
 
         System.out.println("--------------- Leaderboard ---------------");
@@ -77,5 +79,8 @@ public class ChildGameMenu extends OptionsMenu {
             place++;
         }
         System.out.println("--------------- Leaderboard ---------------");
+
+        setStage(OPTIONS_STAGE);
+
     }
 }

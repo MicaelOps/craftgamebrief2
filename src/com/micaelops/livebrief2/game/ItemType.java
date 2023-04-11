@@ -8,11 +8,14 @@ import java.util.Random;
  * inside the game
  *
  * Every item must have a name, and it is optional whether they have components or not
+ *
  * The Items with components cannot be obtained by exploring the world and must be crafted.
  */
 public enum ItemType {
 
-    WIRE("Wire");
+    WIRE("Wire"),
+    PLASTIC("Plastic"),
+    PLASTIC_BAG("Plastic-Bag", new Item(ItemType.PLASTIC, 2));
 
     final String name;
     final Item[] components;
@@ -26,6 +29,7 @@ public enum ItemType {
      * Gets the components the item is made of
      * @return array of components
      */
+
     public Item[] getComponents() {
         return components;
     }
@@ -34,6 +38,7 @@ public enum ItemType {
      * Gets the name of the item
      * @return string with name
      */
+
     public String getName() {
         return name;
     }
@@ -42,6 +47,7 @@ public enum ItemType {
      * Gets all the items that have components
      * @return array with items that have components
      */
+
     public static ItemType[] getItemsWithComponents(){
         return Arrays.stream(values()).filter(itemType -> itemType.components.length > 0).toArray(ItemType[]::new);
     }
@@ -49,8 +55,9 @@ public enum ItemType {
     /**
      * Gets a random ItemType that does not have
      * components.
-     * @return random ItemType
+     * @return ItemType
      */
+
     public static ItemType getRandomItem(){
         ItemType[] noComponentsItems = Arrays.stream(values()).filter(itemType -> itemType.components.length == 0).toArray(ItemType[]::new);
         return noComponentsItems[new Random().nextInt(noComponentsItems.length)];
@@ -59,7 +66,7 @@ public enum ItemType {
     /**
      * Gets the ItemType enum by name
      * @param name of the item
-     * @return ItemType (if exists)
+     * @return ItemType if exists or else null
      */
     public static ItemType getItemByName(String name){
         return Arrays.stream(values()).filter(itemType -> itemType.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
