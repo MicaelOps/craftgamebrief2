@@ -14,7 +14,7 @@ import java.util.Scanner;
 
 /**
  * Extension of the ChildGameMenu
- * by design everything would be on ChildGameMenu but that would decrease
+ * by design everything would be on ChildGameMenu but that would decrease the
  * readability of the code.
  *
  * This Menu is responsible for the Child playing the actual game.
@@ -26,7 +26,7 @@ import java.util.Scanner;
  */
 public class WorldGameMenu extends OptionsMenu {
 
-
+    // Current account being used to play the game
     private final ChildAccount account;
 
     public WorldGameMenu(ChildAccount account) {
@@ -60,25 +60,33 @@ public class WorldGameMenu extends OptionsMenu {
         try {
 
             System.out.println("Exploring the world....");
-            Thread.sleep(2000L); // wait 2 seconds
+
+            // Wait 2 seconds
+            Thread.sleep(2000L);
 
             System.out.println("You found an item!");
             System.out.println("Before you are able to obtain it, you must answer correctly the question.");
 
+            // Get question appropriate with child's progress
             Questions question = Questions.getQuestionByProgress(account.getProgress());
 
+            // Validate
             if(question == null){
                 System.out.println("Something went wrong while getting the question!");
                 return;
             }
 
+            // Ask and check the answer
             if(MethodUtils.getInstance().getStringFromInput((Scanner) scanner, question.getQuestionText(), "answer", 1).equalsIgnoreCase(question.getAnswer())){
+
                 System.out.println("Congratulations! Your answer is correct.");
                 System.out.println("You gained " + (question.getProgressRequired()+10) + "XP from getting the correct answer.");
 
-                ItemType itemType = ItemType.getRandomItem();
+                // Generate Random item appropriate to child progress
+                ItemType itemType = ItemType.getRandomItem(account.getProgress());
                 System.out.println("You obtained a "+itemType.getName());
 
+                // Change Account values
                 account.setProgress(account.getProgress() + question.getProgressRequired() + 10);
                 account.addItem(new Item(itemType, 1));
 
@@ -87,6 +95,8 @@ public class WorldGameMenu extends OptionsMenu {
                 System.out.println("Incorrect answer...");
                 System.out.println("The item mysteriously disappears.....");
                 System.out.println("You lost " + (question.getProgressRequired() +10) + "XP from getting the incorrect answer.");
+
+                // Lose XP for incorrect answer
                 account.setProgress(account.getProgress() - question.getProgressRequired() - 10);
             }
 
@@ -94,23 +104,35 @@ public class WorldGameMenu extends OptionsMenu {
             e.printStackTrace();
         }
     }
+
     private void craftItems(Object scanner){
 
+        // Check if inventory is full
         if(account.findNearestEmptySlot() == -1){
             System.out.println("Inventory is full!");
             setStage(OPTIONS_STAGE);
             return;
         }
 
+        // Show list of items that are possible to craft
         showManual();
 
+        // Get desired Item to craft from user input
         ItemType itemType = ItemType.getItemByName(MethodUtils.getInstance().getStringFromInput((Scanner) scanner, "Which item do you want to craft: ", "Item", 3));
 
+        // Validate input
         if(itemType == null){
             System.out.println("Invalid Item name!");
             return;
         }
 
+        // Ensure the child has enough progress to unlock this item
+        if(itemType.getProgressRequired() > account.getProgress()) {
+            System.out.println("Your progress is to low to craft this item!");
+            return;
+        }
+
+        // Check if user has the components
         for(Item requirements : itemType.getComponents()) {
             if(account.findItemSlot(requirements) == -1) {
                 System.out.println("You don't have the necessary items to craft this item!");
@@ -121,11 +143,13 @@ public class WorldGameMenu extends OptionsMenu {
         // Remove components from child's inventory
         Arrays.stream(itemType.getComponents()).forEach(account::removeItem);
 
+        // Add Item to inventory
         account.addItem(new Item(itemType, 1));
 
         System.out.println("Item successfully crafted!");
-        setStage(OPTIONS_STAGE);
 
+        // Return to Options stage
+        setStage(OPTIONS_STAGE);
     }
 
 
@@ -133,10 +157,16 @@ public class WorldGameMenu extends OptionsMenu {
 
         System.out.println("---------------------- Manual ---------------------- ");
 
+        // Print all Items with components
         for(ItemType item : ItemType.getItemsWithComponents()){
+
+            // Print only items that child has unlocked
+            if(item.getProgressRequired() > account.getProgress())
+                continue;
 
             System.out.println(" Name: "+item.getName());
             System.out.println(" Components: ");
+
             for(Item components : item.getComponents()) {
                 System.out.println("    - "+components.getAmount() + " "+components.getItemType().getName() );
             }
@@ -149,6 +179,7 @@ public class WorldGameMenu extends OptionsMenu {
 
         System.out.println("---------------------- Inventory ---------------------- ");
 
+        // Print every non-null item in the inventory
         for(Item item : account.getItems()){
             if(item != null)
                 System.out.println("    - Item name: "+item.getItemType().name() + "   Amount: "+item.getAmount());
@@ -156,8 +187,8 @@ public class WorldGameMenu extends OptionsMenu {
 
         System.out.println("---------------------- Inventory ---------------------- ");
 
+        // Return to Options stage
         setStage(OPTIONS_STAGE);
-
 
     }
 }

@@ -15,7 +15,7 @@ public class MethodUtils {
     private static MethodUtils instance;
 
     // Database instance
-    private Database database;
+    private final Database database;
 
     private MethodUtils(){
         database = Database.getInstance();

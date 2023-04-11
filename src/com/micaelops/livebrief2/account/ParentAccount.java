@@ -16,7 +16,15 @@ public class ParentAccount extends Account{
         this.children = new String[10]; // Max children is 10
     }
 
+    /**
+     * Adds child to Parent list
+     * @param child username of the child
+     */
+
     public void addChild(String child){
+
+        // Tries to find a space to put the child username
+
         for(int i = 0; i < children.length; i++){
             if(children[i] == null || children[i].equalsIgnoreCase("null")) {
                 children[i] = child;
@@ -25,15 +33,39 @@ public class ParentAccount extends Account{
         }
     }
 
+    /**
+     * Check if there is any child on the list
+     * @return true or false
+     */
+
     public boolean hasChildren() {
         return children[0] !=null && !children[0].isEmpty() && !children[0].equalsIgnoreCase("null");
     }
+
+    /**
+     * Check if child username is present on the list
+     * @param child username of the child
+     * @return true or false
+     */
+
     public boolean hasChild(String child) {
         return Arrays.stream(children).anyMatch(streamchild -> streamchild.equalsIgnoreCase(child));
     }
+
+    /**
+     * Get all children
+     * @return String array
+     */
     public String[] getChildren() {
         return children;
     }
+
+    /**
+     * Translates Data stored in the String array file into
+     * an ParentAccount object
+     * @param data array containing data
+     * @return ParentAccount object
+     */
 
     @Override
     public Account readFromStringArray(String[] data) {
@@ -41,6 +73,13 @@ public class ParentAccount extends Account{
         System.arraycopy(data, 5, children, 0, children.length);
         return new ParentAccount(data[2], data[3], data[1], Integer.parseInt(data[4]), children);
     }
+
+
+    /**
+     * Translates the Data in the Account object
+     * into a String Array
+     * @return data in string array form
+     */
 
     @Override
     public String[] writeToStringArray() {

@@ -7,21 +7,24 @@ import java.util.Random;
  * This class represents all the items that exist
  * inside the game
  *
- * Every item must have a name, and it is optional whether they have components or not
+ * Every item must have a name, progress required to access,
+ * and it is optional whether they have components or not
  *
  * The Items with components cannot be obtained by exploring the world and must be crafted.
  */
 public enum ItemType {
 
-    WIRE("Wire"),
-    PLASTIC("Plastic"),
-    PLASTIC_BAG("Plastic-Bag", new Item(ItemType.PLASTIC, 2));
+    WIRE("Wire",0 ),
+    PLASTIC("Plastic",0),
+    PLASTIC_BAG("Plastic-Bag", 10, new Item(ItemType.PLASTIC, 2));
 
     final String name;
+    final long progressRequired;
     final Item[] components;
 
-    ItemType(String name, Item... components){
+    ItemType(String name, long progressRequired, Item... components){
         this.name = name;
+        this.progressRequired = progressRequired;
         this.components = components;
     }
 
@@ -43,6 +46,16 @@ public enum ItemType {
         return name;
     }
 
+
+    /**
+     * Get Progress Required for the ItemType
+     * @return long value of progress
+     */
+
+    public long getProgressRequired() {
+        return progressRequired;
+    }
+
     /**
      * Gets all the items that have components
      * @return array with items that have components
@@ -54,12 +67,12 @@ public enum ItemType {
 
     /**
      * Gets a random ItemType that does not have
-     * components.
+     * components with certain progress.
      * @return ItemType
      */
 
-    public static ItemType getRandomItem(){
-        ItemType[] noComponentsItems = Arrays.stream(values()).filter(itemType -> itemType.components.length == 0).toArray(ItemType[]::new);
+    public static ItemType getRandomItem(long progress){
+        ItemType[] noComponentsItems = Arrays.stream(values()).filter(itemType -> itemType.components.length == 0 && itemType.getProgressRequired() <= progress).toArray(ItemType[]::new);
         return noComponentsItems[new Random().nextInt(noComponentsItems.length)];
     }
 
